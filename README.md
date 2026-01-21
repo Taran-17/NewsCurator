@@ -1390,30 +1390,8 @@ The project fully supports deployment with **AWS**, **Kubernetes**, and **Terraf
 
 For detailed deployment instructions, refer to the [`infrastructure/`](./infrastructure/README.md) directory, which contains Terraform scripts and Kubernetes manifests.
 
----
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for more details.
-
----
-
-## Contact
-
-If you have any questions or suggestions, feel free to reach out to the repository maintainer:
-
-- **David Nguyen**
-  - [LinkedIn](https://www.linkedin.com/in/hoangsonw/)
-  - [GitHub](https://github.com/hoangsonww)
-  - [Email](mailto:hoangson091104@gmail.com)
-  - [Website](https://sonnguyenhoang.com/)
-
-I will be happy to assist you with any questions or issues you may have regarding this project.
-
-> [!TIP]
-> If I don't know the answer, I'll be able to forward your question to the right person in the AICC team who can help you!
-
----
+ 
+ 
 
 ## Conclusion
 
