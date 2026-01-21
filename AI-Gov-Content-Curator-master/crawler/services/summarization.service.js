@@ -1,0 +1,119 @@
+"use strict";
+
+const {
+  GoogleGenerativeAI,
+  HarmCategory,
+  HarmBlockThreshold,
+} = require("@google/generative-ai");
+const { getGeminiModels } = require("./geminiModels.service");
+const dotenv = require("dotenv");
+dotenv.config();
+
+/* ─────────────────  KEY + MODEL ROTATION ───────────────── */
+
+const API_KEYS = [
+  process.env.GOOGLE_AI_API_KEY,
+  process.env.GOOGLE_AI_API_KEY1,
+  process.env.GOOGLE_AI_API_KEY2,
+  process.env.GOOGLE_AI_API_KEY3,
+].filter(Boolean);
+
+if (!API_KEYS.length) throw new Error("No GOOGLE_AI_API_KEY* values found");
+
+const MAX_RETRIES_PER_PAIR = 2;
+const BACKOFF_MS = 1500;
+
+/* ─────────────────  PARAMS ───────────────── */
+
+const SYSTEM = (process.env.AI_INSTRUCTIONS ?? "").trim();
+
+const generationConfig = {
+  temperature: 0.9,
+  topP: 0.95,
+  topK: 64,
+  maxOutputTokens: 8192,
+};
+
+const safetySettings = [
+  {
+    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+    threshold: HarmBlockThreshold.BLOCK_NONE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+    threshold: HarmBlockThreshold.BLOCK_NONE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+    threshold: HarmBlockThreshold.BLOCK_NONE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+    threshold: HarmBlockThreshold.BLOCK_NONE,
+  },
+];
+
+/**
+ * Check if the error is due to rate limiting or quota exceeded.
+ *
+ * @param e - The error object.
+ */
+const isRateOrQuota = (e) =>
+  e?.status === 429 || /quota|rate|exceed/i.test(e?.message || "");
+
+/**
+ * Check if the error is due to overload or service unavailability.
+ *
+ * @param e - The error object.
+ */
+const isOverloaded = (e) =>
+  e?.status === 503 || /overload|unavailable/i.test(e?.message || "");
+
+/* ─────────────────────────────  EXPORT  ───────────────────────────── */
+
+/**
+ * Summarize the content of an article using Google Generative AI.
+ *
+ * @param article - The article content to summarize.
+ * @returns The summarized text.
+ */
+async function summarizeContent(article) {
+  const models = await getGeminiModels(API_KEYS);
+  for (const key of API_KEYS) {
+    for (const model of models) {
+      const genAI = new GoogleGenerativeAI(key).getGenerativeModel({
+        model,
+        systemInstruction: SYSTEM,
+      });
+
+      for (let attempt = 1; attempt <= MAX_RETRIES_PER_PAIR; attempt++) {
+        try {
+          const result = await genAI.generateContent({
+            contents: [
+              {
+                role: "user",
+                parts: [{ text: `Summarize briefly:\n\n${article}` }],
+              },
+            ],
+            generationConfig,
+            safetySettings,
+          });
+          const text = result?.response?.text?.().trim();
+          if (!text) throw new Error("Empty Gemini response");
+          return text;
+        } catch (err) {
+          if (
+            (isRateOrQuota(err) || isOverloaded(err)) &&
+            attempt < MAX_RETRIES_PER_PAIR
+          ) {
+            await new Promise((r) => setTimeout(r, BACKOFF_MS * attempt));
+            continue;
+          }
+        }
+      }
+    }
+  }
+  throw new Error("All keys/models exhausted while summarizing");
+}
+
+module.exports = { summarizeContent };

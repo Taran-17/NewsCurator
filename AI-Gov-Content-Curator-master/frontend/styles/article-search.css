@@ -1,0 +1,288 @@
+/* ---------- Shared Input Styles ---------- */
+.input-control,
+.search-input {
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  font-size: 1rem;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+  font-family: inherit;
+}
+
+.input-control:focus,
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.16);
+}
+
+[data-theme="dark"] .input-control:focus,
+[data-theme="dark"] .search-input:focus {
+  box-shadow: 0 0 0 3px rgba(69, 161, 255, 0.22);
+}
+
+/* ---------- Article Search Container ---------- */
+.search-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-bottom: 3rem;
+  align-items: stretch;
+  max-width: 100%;
+  padding: 0.75rem;
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.01)),
+    var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.08);
+}
+
+.search-container:focus-within {
+  border-color: var(--accent-color);
+  box-shadow: 0 14px 30px rgba(0, 102, 204, 0.16);
+}
+
+[data-theme="dark"] .search-container {
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .search-container:focus-within {
+  box-shadow: 0 16px 34px rgba(69, 161, 255, 0.22);
+}
+
+.search-input-wrapper {
+  position: relative;
+  flex: 1 1 360px;
+  min-width: 240px;
+  display: flex;
+  align-items: center;
+  background: var(--bg-color);
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  padding: 0.1rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.search-input-wrapper:focus-within {
+  border-color: var(--accent-color);
+  box-shadow:
+    0 0 0 3px rgba(0, 102, 204, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+[data-theme="dark"] .search-input-wrapper {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .search-input-wrapper:focus-within {
+  box-shadow:
+    0 0 0 3px rgba(69, 161, 255, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.95rem;
+  color: var(--accent-color);
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.search-input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  padding: 0.85rem 1rem 0.85rem 2.85rem;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.search-input::placeholder {
+  color: var(--text-color);
+  opacity: 0.45;
+}
+
+.search-input:focus {
+  transform: none;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+@media (max-width: 960px) {
+  .search-container {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.65rem;
+  }
+
+  .search-input-wrapper {
+    width: 100%;
+    flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .search-container {
+    border-radius: 14px;
+  }
+
+  .search-input {
+    font-size: 16px;
+    padding-left: 2.6rem;
+  }
+
+  .search-icon {
+    left: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-container {
+    padding: 0.5rem;
+  }
+
+  .search-input {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+}
+
+/* ---------- Article Search Results ---------- */
+.article-search-results {
+  animation: fadeIn 0.5s ease-in-out;
+  margin-top: 1rem;
+  background: var(--card-bg);
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--card-border);
+}
+
+.search-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.search-header h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  color: var(--text-color);
+}
+
+.search-subtitle {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: var(--text-color);
+  animation: fadeDown 1s ease-out;
+}
+
+.clear-btn {
+  padding: 0.5rem 1rem;
+  background-color: var(--accent-color);
+  color: var(--bg-color);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background-color 0.2s ease;
+  font: inherit;
+}
+
+.clear-btn:hover {
+  background-color: var(--navbar-text);
+}
+
+.loading-message {
+  text-align: center;
+  font-style: italic;
+  color: var(--loading-text);
+  margin: 2rem 0;
+}
+
+.no-results {
+  text-align: center;
+  color: var(--no-result-text);
+  margin: 2rem 0;
+}
+
+/* ---------- Article List Animation ---------- */
+.article-list {
+  animation: slideIn 0.5s ease-out;
+}
+
+/* ---------- Fix Summary Overflow in Search Results ---------- */
+.article-search-results .article-summary {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+.article-search-results .article-summary * {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.article-search-results .article-summary p,
+.article-search-results .article-summary h1,
+.article-search-results .article-summary h2,
+.article-search-results .article-summary h3,
+.article-search-results .article-summary h4,
+.article-search-results .article-summary h5,
+.article-search-results .article-summary h6 {
+  margin: 0 !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* ---------- Animations ---------- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
